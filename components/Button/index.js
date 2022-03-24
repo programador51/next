@@ -1,5 +1,3 @@
-import React from "react";
-
 /**
  * Render a button
  * @param {React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>} props - Props of the button
@@ -24,6 +22,12 @@ export default function Button(props) {
 
           button:hover {
             opacity: 0.7;
+          }
+
+          button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+            pointer-events: none;
           }
         `}
       </style>

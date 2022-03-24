@@ -5,7 +5,7 @@ export default function AppLayout({ children }) {
   return (
     <>
       <style jsx>{styles}</style>
-      <div>
+      <div className="container">
         <main>{children}</main>
       </div>
     </>

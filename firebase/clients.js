@@ -1,4 +1,3 @@
-// import * as firebase from "firebase";
 import { initializeApp } from "firebase/app";
 import {
   GithubAuthProvider,
@@ -6,6 +5,14 @@ import {
   signInWithPopup,
   onAuthStateChanged,
 } from "firebase/auth";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  Timestamp,
+  getDocs,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCCzrJXjggDjrBHzPQ-li5WGUFjTG2VfXY",
@@ -26,6 +33,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 
 const auth = getAuth(firebaseApp);
+const database = getFirestore(firebaseApp);
 
 /**
  * Map the informatino for the login application
@@ -35,6 +43,7 @@ const auth = getAuth(firebaseApp);
 const mapInfoUserGh = (user) => ({
   email: user.email,
   urlProfilePic: user.photoURL,
+  id: user.uid,
 });
 
 /**
@@ -47,8 +56,7 @@ export const loginWithGithub = async () => {
   try {
     const userCredentials = await signInWithPopup(auth, provider);
 
-    const credential = GithubAuthProvider.credentialFromResult(userCredentials);
-    const token = credential.accessToken;
+    GithubAuthProvider.credentialFromResult(userCredentials);
 
     const user = userCredentials.user;
 
@@ -60,11 +68,69 @@ export const loginWithGithub = async () => {
 
 export const onAuthStateChangedState = (onChange = () => {}) => {
   return onAuthStateChanged(auth, (user) => {
+    if (!user) return;
+
     const userParsed = mapInfoUserGh(user);
     onChange(userParsed);
   });
-  //   return onAuthStateChanged((user) => {
-  //     const userParsed = mapInfoUserGh(user.user);
-  //     onChange(userParsed);
-  //   });
+};
+
+/**
+ * Add a devit
+ * @param {object} param0
+ * @returns {boolean} True if devit was added success
+ */
+export const addDevit = async ({ content, userId, avatar, email }) => {
+  // const time = new Timestamp();
+  try {
+    await addDoc(collection(database, "devits"), {
+      content,
+      userId,
+      email,
+      avatar,
+      createdAt: Timestamp.now(),
+      likesCount: 0,
+      sharedCount: 0,
+    });
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+/**
+ * Get the devits made on the system
+ * More info here {@link https://firebase.google.com/docs/firestore/query-data/get-data#get_all_documents_in_a_collection}
+ * @returns {import("../types/context/UserContext").DevitI[]} Devits
+ */
+
+// console.log(definitions);
+
+export const fetchLatestDevits = () => {
+  return getDocs(collection(database, "devits"))
+    .then((devits) => {
+      const devitsGot = [];
+      devits.forEach((devit) => {
+        const data = devit.data();
+
+        const normalizedDate = new Date(data.createdAt.seconds * 1000);
+
+        const formatedDate = new Intl.DateTimeFormat("es-ES").format(
+          normalizedDate
+        );
+
+        devitsGot.push({
+          ...data,
+          id: devit.id,
+          normalizedDate: formatedDate,
+        });
+      });
+      return devitsGot;
+    })
+    .catch((e) => {
+      console.log(e);
+      return [];
+    });
 };

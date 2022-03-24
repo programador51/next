@@ -1,0 +1,14 @@
+.avatarPicture {
+  border-radius: 9999px;
+}
+
+.avatarContainer {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  min-width: 50px;
+}
+
+.avatarContainer > strong {
+  margin: 10px;
+}

@@ -1,7 +1,7 @@
 import css from "styled-jsx/css";
 
 export const styles = css.global`
-  div {
+  div.container {
     display: grid;
     height: 100vh;
     place-items: center;
@@ -13,6 +13,8 @@ export const styles = css.global`
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     height: 90vh;
     width: 100%;
+    position: relative;
+    overflow-y: auto;
   }
 
   @media (min-width: 520px) {

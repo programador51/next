@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
-import { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import AppLayout from "../components/AppLayout";
 import GithubLogin from "../components/Button/Github";
 import { onAuthStateChangedState } from "../firebase/clients";
@@ -60,12 +59,10 @@ export default function Home() {
             height={150}
             alt="devter-logo"
           />
-          <Link href="https://nextjs.org/learn/basics/assets-metadata-css/third-party-javascript">
-            <h1>
-              <a>devter</a>
-            </h1>
-          </Link>
-          <h2>Le'ts talk about development 😎</h2>
+
+          <h1>devter</h1>
+
+          <h2>Le&apos;ts talk about development 😎</h2>
           <GithubLogin />
         </section>
       </AppLayout>
