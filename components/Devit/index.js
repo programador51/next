@@ -1,7 +1,17 @@
 import Avatar from "components/Avatar";
+import useTimeago from "hooks/useTimeago";
 import React from "react";
 
-export default function Devit({ username, avatar, message, id, createdAt }) {
+export default function Devit({
+  username,
+  avatar,
+  message,
+  id,
+  createdAt,
+  img = "",
+}) {
+  const timeago = useTimeago(createdAt);
+
   return (
     <>
       <article key={window.crypto.randomUUID()}>
@@ -9,8 +19,15 @@ export default function Devit({ username, avatar, message, id, createdAt }) {
 
         <div className="devit">
           <strong>{username}</strong>
-          <date>{createdAt}</date>
+          <date>{timeago}</date>
           <p>{message}</p>
+          {img !== "" ? (
+            <div className="devit-img">
+              <img src={img} />
+            </div>
+          ) : null}
+
+          {/* <Image height={300} width={300} url/> */}
         </div>
       </article>
 
@@ -27,6 +44,17 @@ export default function Devit({ username, avatar, message, id, createdAt }) {
 
           .devit {
             margin: 0 0 0 10px;
+            width: 100%;
+          }
+
+          img {
+            max-width: 100%;
+            max-height: 200px;
+          }
+
+          .devit-img {
+            display: flex;
+            justify-content: center;
           }
 
           date:before {

@@ -3,6 +3,11 @@ import AppLayout from "components/AppLayout";
 import Devit from "components/Devit";
 import { fetchLatestDevits } from "../../firebase/clients";
 import useUser from "hooks/useUser";
+import Link from "next/link";
+import Create from "components/Icons/Create";
+import Home from "components/Icons/Home";
+import Search from "components/Icons/Search";
+import Head from "next/head";
 
 export default function HomePage() {
   /**
@@ -43,12 +48,28 @@ export default function HomePage() {
             border-top: 2px solid gray;
             bottom: 0;
             z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+          }
+
+          nav > a {
+            transition: background 0.25s ease;
+            padding: 10px;
+          }
+
+          nav > a:hover {
+            background: radial-gradient(#0099ff22 15%, transparent 16%);
+            background-size: 180px 180px;
+            background-position: center;
           }
 
           section {
             padding: 10px 0;
             display: block;
             background-color: #fff;
+            flex: 1;
+            min-height: 100%;
           }
 
           article {
@@ -58,6 +79,9 @@ export default function HomePage() {
         `}
       </style>
       <AppLayout>
+        <Head>
+          <title>Inicio / Devter</title>
+        </Head>
         <header>
           <strong>Inicio</strong>
         </header>
@@ -71,11 +95,30 @@ export default function HomePage() {
               message={devit.content}
               username={devit.email}
               createdAt={devit.normalizedDate}
+              img={devit.img}
             />
           ))}
         </section>
 
-        <nav>123</nav>
+        <nav>
+          <Link href="/compose/tweet">
+            <a>
+              <Create stroke="#09f" width={32} height={32} />
+            </a>
+          </Link>
+
+          <Link href="/compose/tweet">
+            <a>
+              <Home stroke="#09f" width={32} height={32} />
+            </a>
+          </Link>
+
+          <Link href="/compose/tweet">
+            <a>
+              <Search stroke="#09f" width={32} height={32} />
+            </a>
+          </Link>
+        </nav>
       </AppLayout>
     </>
   );

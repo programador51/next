@@ -12,7 +12,11 @@ import {
   addDoc,
   Timestamp,
   getDocs,
+  query,
+  orderBy,
 } from "firebase/firestore";
+
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCCzrJXjggDjrBHzPQ-li5WGUFjTG2VfXY",
@@ -77,16 +81,28 @@ export const onAuthStateChangedState = (onChange = () => {}) => {
 
 /**
  * Add a devit
- * @param {object} param0
+ * @param {object} props - Props of parameter
+ * @param {string} props.content - Content of the devit
+ * @param {string} props.userId - Id of the user who created devit
+ * @param {string} props.avatar - Avatar image of the user (profile pic)
+ * @param {string} props.email - Email of the user
+ * @param {string?} props.img - Attached image to devit
  * @returns {boolean} True if devit was added success
  */
-export const addDevit = async ({ content, userId, avatar, email }) => {
+export const addDevit = async ({
+  content,
+  userId,
+  avatar,
+  email,
+  img = "",
+}) => {
   // const time = new Timestamp();
   try {
     await addDoc(collection(database, "devits"), {
       content,
       userId,
       email,
+      img,
       avatar,
       createdAt: Timestamp.now(),
       likesCount: 0,
@@ -102,29 +118,29 @@ export const addDevit = async ({ content, userId, avatar, email }) => {
 
 /**
  * Get the devits made on the system
- * More info here {@link https://firebase.google.com/docs/firestore/query-data/get-data#get_all_documents_in_a_collection}
+ * Documentation get documents {@link https://firebase.google.com/docs/firestore/query-data/get-data#get_all_documents_in_a_collection}
+ * Documentation sort documents {@link https://firebase.google.com/docs/firestore/query-data/get-data#get_multiple_documents_from_a_collection}
  * @returns {import("../types/context/UserContext").DevitI[]} Devits
  */
 
-// console.log(definitions);
-
 export const fetchLatestDevits = () => {
-  return getDocs(collection(database, "devits"))
+  const queryGetDevits = query(
+    collection(database, "devits"),
+    orderBy("createdAt", "desc")
+  );
+
+  return getDocs(queryGetDevits)
     .then((devits) => {
       const devitsGot = [];
       devits.forEach((devit) => {
         const data = devit.data();
 
-        const normalizedDate = new Date(data.createdAt.seconds * 1000);
-
-        const formatedDate = new Intl.DateTimeFormat("es-ES").format(
-          normalizedDate
-        );
+        console.log(data);
 
         devitsGot.push({
           ...data,
           id: devit.id,
-          normalizedDate: formatedDate,
+          normalizedDate: +data.createdAt.toDate(),
         });
       });
       return devitsGot;
@@ -133,4 +149,21 @@ export const fetchLatestDevits = () => {
       console.log(e);
       return [];
     });
+};
+
+const storage = getStorage();
+
+/**
+ * More info about firebase method on {@link https://firebase.google.com/docs/storage/web/upload-files#upload_from_a_blob_or_file}
+ * @param {File} file - File to upload
+ * @returns {Promise<import("firebase/storage").UploadTaskSnapshot>} Upload result of the file image
+ */
+export const uploadImage = (file) => {
+  const imageRef = ref(storage, `images/${file.name}`);
+
+  return uploadBytesResumable(imageRef, file)
+    .then((snapshoot) => {
+      return snapshoot;
+    })
+    .catch((e) => console.log(e));
 };

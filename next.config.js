@@ -7,6 +7,7 @@ const nextConfig = {
       "pbs.twimg.com",
       "devemyhg.lycee-darchicourt.net",
       "https://github.com/",
+      "firebasestorage.googleapis.com",
     ],
   },
 };
