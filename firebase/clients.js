@@ -134,9 +134,6 @@ export const fetchLatestDevits = () => {
       const devitsGot = [];
       devits.forEach((devit) => {
         const data = devit.data();
-
-        console.log(data);
-
         devitsGot.push({
           ...data,
           id: devit.id,

@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 import React, { createContext, useState, useEffect } from "react";
-import AppLayout from "../components/AppLayout";
 import GithubLogin from "../components/Button/Github";
 import { onAuthStateChangedState } from "../firebase/clients";
 
@@ -51,7 +50,7 @@ export default function Home() {
         <title>devter</title>
       </Head>
 
-      <AppLayout>
+      <>
         <section>
           <Image
             src="/devter-logo.png"
@@ -65,7 +64,7 @@ export default function Home() {
           <h2>Le&apos;ts talk about development 😎</h2>
           <GithubLogin />
         </section>
-      </AppLayout>
+      </>
     </Provider>
   );
 }

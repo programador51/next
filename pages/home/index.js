@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AppLayout from "components/AppLayout";
 import Devit from "components/Devit";
 import { fetchLatestDevits } from "../../firebase/clients";
 import useUser from "hooks/useUser";
@@ -78,7 +77,7 @@ export default function HomePage() {
           }
         `}
       </style>
-      <AppLayout>
+      <>
         <Head>
           <title>Inicio / Devter</title>
         </Head>
@@ -119,7 +118,7 @@ export default function HomePage() {
             </a>
           </Link>
         </nav>
-      </AppLayout>
+      </>
     </>
   );
 }

@@ -1,5 +1,6 @@
 import Avatar from "components/Avatar";
 import useTimeago from "hooks/useTimeago";
+import Link from "next/link";
 import React from "react";
 
 export default function Devit({
@@ -14,12 +15,23 @@ export default function Devit({
 
   return (
     <>
-      <article key={window.crypto.randomUUID()}>
+      <article key={Math.random()}>
         <Avatar userName={username} url={avatar} showUserName={false} />
 
         <div className="devit">
           <strong>{username}</strong>
-          <date>{timeago}</date>
+          <Link
+            href={{
+              pathname: "/status/[id]",
+              query: {
+                id: id,
+              },
+            }}
+          >
+            <a>
+              <date>{timeago}</date>
+            </a>
+          </Link>
           <p>{message}</p>
           {img !== "" ? (
             <div className="devit-img">

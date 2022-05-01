@@ -1,4 +1,3 @@
-import AppLayout from "components/AppLayout";
 import Button from "components/Button";
 import useUser from "hooks/useUser";
 import { useState, useEffect } from "react";
@@ -118,7 +117,7 @@ export default function ComposeTweet() {
 
   return (
     <>
-      <AppLayout>
+      <>
         <ToastContainer />
         <form onSubmit={submit}>
           <textarea
@@ -142,7 +141,7 @@ export default function ComposeTweet() {
             <Button disabled={isButtonDisabled}>Devitear</Button>
           )}
         </form>
-      </AppLayout>
+      </>
 
       <style jsx>{`
         * {

@@ -21,9 +21,11 @@ const getDateDiffs = (timestamp) => {
 
 export default function useTimeago(timestamp) {
   const { value, unit } = getDateDiffs(timestamp);
-  const relativeTimeFormat = new Intl.RelativeTimeFormat(navigator.language, {
+  const relativeTimeFormat = new Intl.RelativeTimeFormat("es-ES", {
     style: "short",
   });
+
+  console.log(value, unit);
 
   return relativeTimeFormat.format(value, unit);
   //   return timestamp;
